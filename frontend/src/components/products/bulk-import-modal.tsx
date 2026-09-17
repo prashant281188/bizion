@@ -8,7 +8,6 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Loader2, UploadCloud, AlertCircle, CheckCircle2, DownloadCloud, Settings } from 'lucide-react';
 import ExcelJS from 'exceljs';
-import * as xlsx from 'xlsx';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 
@@ -263,12 +262,46 @@ export function BulkImportModal({ onClose, onSuccess }: BulkImportModalProps) {
     setLoading(true);
 
     try {
-      // Use xlsx to read the file to easily extract calculated formula values
+      // Use ExcelJS to read the uploaded workbook and parse rows
       const buffer = await file.arrayBuffer();
-      const workbook = xlsx.read(buffer, { type: 'array' });
-      
-      const worksheet = workbook.Sheets['Template'] || workbook.Sheets[workbook.SheetNames[0]];
-      const data = xlsx.utils.sheet_to_json<any>(worksheet, { defval: '' });
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(buffer);
+
+      const worksheet = workbook.getWorksheet('Template') || workbook.worksheets[0];
+      if (!worksheet) {
+        toast.error('No valid worksheet found in workbook');
+        return;
+      }
+
+      // Read header row
+      const headerRow = worksheet.getRow(1);
+      const headers: { [colNum: number]: string } = {};
+      headerRow.eachCell((cell, colNumber) => {
+        const val = cell.value ? String(cell.value).trim() : '';
+        if (val) headers[colNumber] = val;
+      });
+
+      // Extract row data
+      const data: any[] = [];
+      worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber === 1) return; // Skip header row
+        const rowData: Record<string, any> = {};
+        Object.entries(headers).forEach(([colNumStr, headerName]) => {
+          const colNum = Number(colNumStr);
+          const cell = row.getCell(colNum);
+          let cellValue = cell.value;
+          // Handle formula objects or rich text if present
+          if (cellValue && typeof cellValue === 'object') {
+            if ('result' in cellValue) {
+              cellValue = (cellValue as any).result;
+            } else if ('text' in cellValue) {
+              cellValue = (cellValue as any).text;
+            }
+          }
+          rowData[headerName] = cellValue !== undefined && cellValue !== null ? String(cellValue).trim() : '';
+        });
+        data.push(rowData);
+      });
 
       const parsedRowsData: ParsedRow[] = [];
       const existingNames = new Set(existingProducts.map(p => p.name.toLowerCase()));
