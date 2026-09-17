@@ -1,0 +1,3 @@
+ALTER TABLE "product_variant_price_history" ALTER COLUMN "variant_id" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "product_variant_price_history" ADD COLUMN "product_id" uuid;--> statement-breakpoint
+ALTER TABLE "product_variant_price_history" ADD CONSTRAINT "product_variant_price_history_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;

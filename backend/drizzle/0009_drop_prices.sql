@@ -1,0 +1,14 @@
+ALTER TABLE "products" DROP COLUMN "base_price";
+ALTER TABLE "products" DROP COLUMN "selling_price";
+ALTER TABLE "products" DROP COLUMN "cost_price";
+ALTER TABLE "products" DROP COLUMN "list_price";
+ALTER TABLE "products" DROP COLUMN "discount_pct";
+ALTER TABLE "products" DROP COLUMN "margin_pct";
+ALTER TABLE "product_variants" DROP COLUMN "base_price";
+ALTER TABLE "product_variants" DROP COLUMN "selling_price";
+ALTER TABLE "product_variants" DROP COLUMN "cost_price";
+ALTER TABLE "product_variants" DROP COLUMN "list_price";
+ALTER TABLE "product_variants" DROP COLUMN "discount_pct";
+ALTER TABLE "product_variants" DROP COLUMN "margin_pct";
+ALTER TABLE "products" ADD COLUMN "valuation_cost" numeric(15, 2) DEFAULT '0' NOT NULL;
+ALTER TABLE "product_variants" ADD COLUMN "valuation_cost" numeric(15, 2) DEFAULT '0' NOT NULL;
