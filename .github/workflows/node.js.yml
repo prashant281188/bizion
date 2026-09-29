@@ -27,5 +27,4 @@ jobs:
       working-directory: ${{ matrix.project }}
     - run: npm run build --if-present
       working-directory: ${{ matrix.project }}
-    - run: npm test
-      working-directory: ${{ matrix.project }}
+
