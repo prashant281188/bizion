@@ -1,12 +1,32 @@
-name: variable-demo
-run-name: this is variable demo
+name: GitHub Actions Echo Demo
 
-on:
-  push:
-    branches: [ "main" ]
-  
+# This triggers the workflow manually via the GitHub UI ("Run workflow" button)
+on: 
+  workflow_dispatch:
+
 jobs:
-  build:
+  demonstrate-echo:
     runs-on: ubuntu-latest
+    
     steps:
-    - run: echo "$GITHUB_ACTION_PATH $CI $GITHUB_ACTION $GITHUB_ACTION_REPOSITORY"
+      - name: 1. Basic Single Line Echo
+        run: echo "Hello! This is a simple single-line echo demo."
+
+      - name: 2. Multi-line Echo
+        run: |
+          echo "This is line number one."
+          echo "This is line number two."
+          echo "This is line number three."
+
+      - name: 3. Echoing System Variables
+        run: |
+          echo "The current actor/user is: $GITHUB_ACTOR"
+          echo "The repository name is: $GITHUB_REPOSITORY"
+          echo "The current run number is: $GITHUB_RUN_NUMBER"
+
+      - name: 4. Creating and Echoing an Output (Advanced)
+        id: step_one
+        run: echo "my_secret_sauce=Barbecue" >> $GITHUB_OUTPUT
+
+      - name: 5. Consuming the Output from the Previous Step
+        run: echo "The secret sauce from the previous step is ${{ steps.step_one.outputs.my_secret_sauce }}"
