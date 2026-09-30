@@ -1,0 +1,8 @@
+name: variable-demo
+run-name: this is variable demo
+
+on:
+  push: "main"
+
+jobs:
+  
