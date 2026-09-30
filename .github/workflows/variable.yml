@@ -2,7 +2,11 @@ name: variable-demo
 run-name: this is variable demo
 
 on:
-  push: "main"
-
-jobs:
+  push:
+    branches: [ "main" ]
   
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - run: "echo $GITHUB_ACTION_PATH"
