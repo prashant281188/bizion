@@ -6,7 +6,7 @@ on:
 
 jobs:
   demonstrate-echo:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     
     steps:
       - name: 1. Basic Single Line Echo
