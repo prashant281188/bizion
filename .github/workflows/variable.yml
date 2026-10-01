@@ -7,10 +7,12 @@ on:
 jobs:
   demonstrate-echo:
     runs-on: ubuntu-slim
+
+    environment: development
     
     steps:
       - name: 1. Basic Single Line Echo
-        run: echo "Hello! This is a simple single-line echo demo."
+        run: echo "Hello! This is a simple single-line echo demo. $DB_PASSWORD"
 
       - name: 2. Multi-line Echo
         run: |
