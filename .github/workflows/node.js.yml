@@ -2,11 +2,11 @@
 name: Node.js CI
 run-name: This is run name
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  
+  # push:
+    # branches: [ "main" ]
+  # pull_request:
+   # branches: [ "main" ]
+  workflow_run:
 jobs:
   build:
     runs-on: ubuntu-latest
