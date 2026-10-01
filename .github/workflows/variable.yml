@@ -12,7 +12,7 @@ jobs:
     
     steps:
       - name: 1. Basic Single Line Echo
-        run: echo "Hello! This is a simple single-line echo demo. {{vars.DB_PASSWORD}}"
+        run: echo "Hello! This is a simple single-line echo demo. ${{vars.DB_PASSWORD}}"
 
       - name: 2. Multi-line Echo
         run: |
