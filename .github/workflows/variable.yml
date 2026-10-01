@@ -8,7 +8,7 @@ jobs:
   demonstrate-echo:
     runs-on: ubuntu-slim
 
-    environment: development
+    environment: deployment
     
     steps:
       - name: 1. Basic Single Line Echo
