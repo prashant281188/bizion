@@ -31,8 +31,6 @@ RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/drizzle ./drizzle
 
-# Copy public assets
-COPY public/ ./public/
 
 # Ensure non-root permissions
 USER node
