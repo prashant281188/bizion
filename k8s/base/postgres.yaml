@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bizion-postgres
+  namespace: bizion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bizion-postgres
+  template:
+    metadata:
+      labels:
+        app: bizion-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16-alpine
+        env:
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+        - name: POSTGRES_DB
+          value: "bizion"
+        ports:
+        - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bizion-postgres
+  namespace: bizion
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: bizion-postgres

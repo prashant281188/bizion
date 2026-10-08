@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bizion-redis
+  namespace: bizion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bizion-redis
+  template:
+    metadata:
+      labels:
+        app: bizion-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bizion-redis
+  namespace: bizion
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: bizion-redis

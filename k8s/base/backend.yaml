@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bizion-backend
+  namespace: bizion
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bizion-backend
+  template:
+    metadata:
+      labels:
+        app: bizion-backend
+    spec:
+      containers:
+      - name: backend
+        image: bizion-backend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: bizion-config
+        env:
+        - name: JWT_SECRET
+          value: "super-secret-jwt-key-minimum-16-chars"
+        - name: JWT_REFRESH_SECRET
+          value: "super-secret-jwt-refresh-key-minimum-16-chars"
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bizion-backend
+  namespace: bizion
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: bizion-backend

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bizion
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bizion-config
+  namespace: bizion
+data:
+  PORT: "3000"
+  NODE_ENV: "production"
+  DATABASE_URL: "postgresql://postgres:postgres@bizion-postgres:5432/bizion"
+  REDIS_URL: "redis://bizion-redis:6379"
+  NEXT_PUBLIC_API_URL: "/api/v1"
